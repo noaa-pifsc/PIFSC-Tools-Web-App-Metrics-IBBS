@@ -1,10 +1,10 @@
 services:
-  web-app-metrics:
+  ibbs-web-app-metrics:
     volumes:
-      - "web-app-metrics-data:/app/data"
-      - "web-app-metrics-logs:/app/logs"
+      - "ibbs-web-app-metrics-data:/app/data"
+      - "ibbs-web-app-metrics-logs:/app/logs"
     environment:
       TZ: "Pacific/Honolulu"
 volumes:
-  web-app-metrics-data:
-  web-app-metrics-logs:
+  ibbs-web-app-metrics-data:
+  ibbs-web-app-metrics-logs:

@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # project path name
-project_path="web-app-metrics"
+project_path="ibbs-web-app-metrics"
 
 # project git URL value
-git_url="git@picgitlab.nmfs.local:centralized-data-tools/web-app-metrics.git"
+git_url="git@picgitlab.nmfs.local:web-app-metrics/ibbs-web-app-metrics.git"

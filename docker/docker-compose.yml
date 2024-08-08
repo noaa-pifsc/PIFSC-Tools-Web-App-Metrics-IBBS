@@ -1,6 +1,6 @@
 services:
-  web-app-metrics:
+  ibbs-web-app-metrics:
     build:
       context: .
-    image: pifsc/web-app-metrics:latest
-    container_name: web-app-metrics
+    image: pifsc/ibbs-web-app-metrics:latest
+    container_name: ibbs-web-app-metrics
