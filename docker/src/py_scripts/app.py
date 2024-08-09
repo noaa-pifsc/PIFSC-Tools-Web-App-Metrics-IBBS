@@ -26,16 +26,16 @@ print_log_messages = True
 # create the .csv file to capture the web performance metrics
 
 # check if the .csv file exists
-if os.path.isfile('/app/data/web_performance_metrics.csv'):
+if os.path.isfile('/app/data/'+app_config.csv_output_file):
     # the .csv file exists
 
     # open the .csv file in append mode
-    fp = open("/app/data/web_performance_metrics.csv", "a")
+    fp = open("/app/data/"+app_config.csv_output_file, "a")
 else:
     # the .csv file does not exist
 
     # create the .csv file in write mode:
-    fp = open("/app/data/web_performance_metrics.csv", "x")
+    fp = open("/app/data/"+app_config.csv_output_file, "x")
 
     # create the .csv header row
     fp.write('"App Name","Metrics App Location","Test App Location","Date/Time","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
