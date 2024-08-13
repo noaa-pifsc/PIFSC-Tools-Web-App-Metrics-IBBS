@@ -6,12 +6,12 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
 ## Resources
 -   IBBS WAM Version Control Information:
     -   URL: https://picgitlab.nmfs.local/web-app-metrics/ibbs-web-app-metrics
-    -   Version: 1.0 (Git tag: ibbs_web_app_metrics_v1.0)
+    -   Version: 1.2 (Git tag: ibbs_web_app_metrics_v1.2)
     -   Forked repository (upstream)
         -   [Web App Metrics README](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics/-/blob/main/README.md?ref_type=heads)
         -   WAM Version Control Information:
     -   URL: git@picgitlab.nmfs.local:centralized-data-tools/web-app-metrics.git
-    -   Version: 1.0 (Git tag: web_app_metrics_v1.0)
+    -   Version: 1.2 (Git tag: web_app_metrics_v1.2)
 
 ## Scenarios
 -   There are three different scenarios implemented by the docker project:

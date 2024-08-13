@@ -80,16 +80,33 @@ def process_browser_network_logs (logs, print_log_messages):
             if (not log["params"]["response"]["fromDiskCache"]):
                 # the file is not from disk cache, include it in the total number/size of files
                 
+                # determine if the content length value in the JSON object is uppercase (Content-Length)
+                uppercase_content_length = ("Content-Length" in log["params"]["response"]["headers"])
+                
+                # determine if the content length value in the JSON object is lowercase (content-length)
+                lowercase_content_length = ("content-length" in log["params"]["response"]["headers"])
+                
                 # check if the Content-Length element exists:
-                if "content-length" in log["params"]["response"]["headers"]:
+                if (uppercase_content_length or lowercase_content_length):
                     # add the Content-Length element value to the total file size
                     
-                    # log the content length value for the current URL resource
-                    log_value ("content length: "+str(log["params"]["response"]["headers"]["content-length"])+" for url: "+log["params"]["response"]['url'], False)
+                    # check if the JSON content-length element is lowercase
+                    if (lowercase_content_length): 
+                        # the content-length element is lowercase
                     
-                    # add the content length value for the current URL resource to the total_file_size variable:
-                    total_file_size += int (log["params"]["response"]["headers"]["content-length"])
+                        # log the content length value for the current URL resource
+                        log_value ("content length: "+str(log["params"]["response"]["headers"]["content-length"])+" for url: "+log["params"]["response"]['url'], False)
+                        
+                        # add the content length value for the current URL resource to the total_file_size variable:
+                        total_file_size += int (log["params"]["response"]["headers"]["content-length"])
+                    else:
+                        # the content-length element is uppercase
 
+                        # log the content length value for the current URL resource
+                        log_value ("content length: "+str(log["params"]["response"]["headers"]["Content-Length"])+" for url: "+log["params"]["response"]['url'], False)
+                        
+                        # add the content length value for the current URL resource to the total_file_size variable:
+                        total_file_size += int (log["params"]["response"]["headers"]["Content-Length"])
                 else:
                     # add the encoded data length element value to the total file size variable
                     total_file_size += int (log["params"]["response"]["encodedDataLength"])
