@@ -1,17 +1,17 @@
 # IBBS - Web Application Metrics
 
 ## Overview
-The International Billfish Biosampling System (IBBS) Web Application Metrics (WAM) project was developed to provide an automated method to capture performance metrics from the user perspective for a suite of web  actions on the IBBS web app.  The IBBS WAM project can be executed in a variety of scenarios for flexibility.  This project is forked from the [Web App Metrics](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics) and customized for the IBBS web app.  
+The International Billfish Biosampling System (IBBS) Web Application Metrics (WAM) project was developed to provide an automated method to capture performance metrics from the user perspective for a suite of web actions on the IBBS web app.  The IBBS WAM project can be executed in a variety of scenarios for flexibility.  This project is forked from the [Web App Metrics](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics) and customized for the IBBS web app.  
 
 ## Resources
 -   IBBS WAM Version Control Information:
     -   URL: https://picgitlab.nmfs.local/web-app-metrics/ibbs-web-app-metrics
-    -   Version: 1.2 (Git tag: ibbs_web_app_metrics_v1.2)
+    -   Version: 1.3 (Git tag: ibbs_web_app_metrics_v1.3)
     -   Forked repository (upstream)
         -   [Web App Metrics README](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics/-/blob/main/README.md?ref_type=heads)
         -   WAM Version Control Information:
     -   URL: git@picgitlab.nmfs.local:centralized-data-tools/web-app-metrics.git
-    -   Version: 1.2 (Git tag: web_app_metrics_v1.2)
+    -   Version: 1.4 (Git tag: web_app_metrics_v1.4)
 
 ## Scenarios
 -   There are three different scenarios implemented by the docker project:
@@ -47,9 +47,13 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
     -   Screenshot file name - the name of the screenshot file saved in the data volume for the given web action
 
 ## Implemented Web Actions
--   Load Login Page
--   Login to web application/Load Full Sampling Report Page
--   Update the Region select element to filter the Full Sampling Report Page
--   Open the View All Specimens Page
--   Open the View/Edit Specimen Page
--   Submit the specimen form to create a new record
+1.  Load Login Page
+2.  Login to web application/Load Full Sampling Report Page
+3.  Update the Region select element to filter the Full Sampling Report Page
+4.  Open the View All Specimens Page
+5.  Open the View/Edit Specimen Page
+6.  Submit the specimen form to create a new record
+7.  Submit the specimen form to update an existing record
+8.  Download the specimen .csv file
+9. Load Regional Sampling Charts
+10. Filter/Reload Regional Sampling Charts

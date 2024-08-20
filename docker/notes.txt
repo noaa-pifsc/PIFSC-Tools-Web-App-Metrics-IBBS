@@ -1,4 +1,4 @@
-cd C:\Users\jesse.abdul\Documents\Version Control\Git\web-app-metrics\docker
+cd C:\Users\jesse.abdul\Documents\Version Control\Git\ibbs-web-app-metrics\docker
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d  --build
 
 # leave docker container running
