@@ -41,7 +41,7 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
     -   Date/Time - The Date/Time the given web action was started in MM/DD/YYYY HH:MI:SS AM/PM format
     -   Page Name - The page the web action was executed on
     -   Action - The type of web action
-    -   # Files - The total number of web resource files (e.g. image, css, JavaScript file, etc.) downloaded for the given web action
+    -   \# Files - The total number of web resource files (e.g. image, css, JavaScript file, etc.) downloaded for the given web action
     -   Total File Size (KB) - The total size in kilobytes of the web resource files downloaded for the given web action
     -   Total Response Time (s) - The total number of seconds for the web action to complete and the app is ready to accept user interactions
     -   Screenshot file name - the name of the screenshot file saved in the data volume for the given web action
