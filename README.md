@@ -1,16 +1,16 @@
 # IBBS - Web Application Metrics
 
 ## Overview
-The International Billfish Biosampling System (IBBS) Web Application Metrics (WAM) project was developed to provide an automated method to capture performance metrics from the user perspective for a suite of web actions on the IBBS web app.  The IBBS WAM project can be executed in a variety of scenarios for flexibility.  This project is forked from the [Web App Metrics](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics) and customized for the IBBS web app.  
+The International Billfish Biosampling System (IBBS) Web Application Metrics (WAM) project was developed to provide an automated method to capture performance metrics from the user perspective for a suite of web actions on the IBBS web app.  The IBBS WAM project can be executed in a variety of scenarios for flexibility.  This project is forked from the [Web App Metrics](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics) and customized for the IBBS web app.  
 
 ## Resources
 -   IBBS WAM Version Control Information:
     -   URL: git@github.com:noaa-pifsc/PIFSC-Tools-IBBS-Web-App-Metrics.git
     -   Version: 1.3 (Git tag: ibbs_web_app_metrics_v1.3)
     -   Forked repository (upstream)
-        -   [Web App Metrics README](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics/-/blob/main/README.md?ref_type=heads)
+        -   [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md)
         -   WAM Version Control Information:
-            -   URL: git@picgitlab.nmfs.local:centralized-data-tools/web-app-metrics.git
+            -   URL: git@github.com:noaa-pifsc/PIFSC-Tools-Web-App-Metrics.git
             -   Version: 1.4 (Git tag: web_app_metrics_v1.4)
 
 ## Scenarios
@@ -23,13 +23,13 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
 -   Execute the appropriate docker preparation script stored in the [deployment_scripts](./deployment_scripts) folder to prepare the docker container for deployment in a new working directory
     -   For example use the [prepare_docker_project.local.sh](./deployment_scripts/prepare_docker_project.local.sh) bash script to prepare the Local docker container for deployment in the c:/docker/ibbs-web-app-metrics-local folder
 -   Update the login_credentials.py file in the appropriate new working directory to specify the web login credentials for the (e.g. c:/docker/ibbs-web-app-metrics-local/docker/src/login_credentials.py) for the local scenario
--   \*Note: more information about the setup procedure for this forked project is available in the [Web App Metrics README](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics/-/blob/main/README.md?ref_type=heads#forked-repository-implementation)
+-   \*Note: more information about the setup procedure for this forked project is available in the [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md#forked-repository-implementation)
 
 ## Building/Running Container
 -   Execute the appropriate build and deploy script for the given scenario (e.g. [build_deploy_project.remote.sh](./deployment_scripts/build_deploy_project.remote.sh) for the remote scenario)
 
 ## Docker Application Processing
--   \*Note: more information about the docker application processing for this forked project is available in the [Web App Metrics README](https://picgitlab.nmfs.local/centralized-data-tools/web-app-metrics/-/blob/main/README.md?ref_type=heads#docker-application-processing)
+-   \*Note: more information about the docker application processing for this forked project is available in the [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md#docker-application-processing)
 
 ## Checking Results
 -   Open the docker volume ibbs-web-app-metrics-logs to view the log files for the different executions of the docker container
