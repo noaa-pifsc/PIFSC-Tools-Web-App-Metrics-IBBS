@@ -13,6 +13,9 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
             -   URL: git@github.com:noaa-pifsc/PIFSC-Tools-Web-App-Metrics.git
             -   Version: 1.4 (Git tag: web_app_metrics_v1.4)
 -   [Detailed/Summary performance metrics](https://docs.google.com/spreadsheets/d/1oDtnMyg9SosxHOoiq4af35_TU_-7dZyE/edit?usp=drive_link&ouid=107579489323446884981&rtpof=true&sd=true)
+    -   During the testing window the project was configured to run on an hourly basis each weekday for 12 hours (7 AM to 7 PM HST)
+    -   The [ibbs-web-app-metrics tab](https://docs.google.com/spreadsheets/d/1oDtnMyg9SosxHOoiq4af35_TU_-7dZyE/edit?gid=2021517478#gid=2021517478) contains the detailed information for each web action and the corresponding metrics that were captured
+    -   The [Summary tab](https://docs.google.com/spreadsheets/d/1oDtnMyg9SosxHOoiq4af35_TU_-7dZyE/edit?gid=1590693321#gid=1590693321) contains the summarized information with comparisons between the different scenarios
 
 ## Scenarios
 -   There are three different scenarios implemented by the docker project:
