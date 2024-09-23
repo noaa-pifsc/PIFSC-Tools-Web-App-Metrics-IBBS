@@ -86,8 +86,8 @@ custom_functions.log_value("1. Request the base_web_url defined in the applicati
 start_timer=round(time.time()*1000)
 
 
-# check the value of the app_location
-if (project_scenario_config.app_location == "remote"):
+# check the value of the web_app_location
+if (project_scenario_config.web_app_location == "remote"):
     # this a remote application, use the remote_web_url
 
     custom_functions.log_value("This is a remote application: "+app_config.remote_web_url, print_log_messages)
@@ -597,7 +597,7 @@ screenshot_file = driver.title.replace("/", " ")+' specimen download complete.pn
 # save the screenshot from the web request/page load
 driver.save_screenshot('/app/data/screenshots/'+screenshot_file)
 
-fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
+fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.web_app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
 
 """
 END - 8.  Download the specimen .csv file
