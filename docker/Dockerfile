@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y wget && apt-get install -y zip \
 
 RUN pip3 install selenium webdriver-manager
 
+# set the timezone of the linux container to UTC
+ENV TZ=UTC
+
 COPY ./src/ /app
 
 WORKDIR /app/py_scripts

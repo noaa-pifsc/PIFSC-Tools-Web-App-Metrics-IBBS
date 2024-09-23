@@ -1,10 +1,11 @@
+version: '3'
 services:
   ibbs-web-app-metrics:
     volumes:
       - "ibbs-web-app-metrics-data:/app/data"
       - "ibbs-web-app-metrics-logs:/app/logs"
     environment:
-      TZ: "Pacific/Honolulu"
+      TZ: "UTC"
 volumes:
   ibbs-web-app-metrics-data:
   ibbs-web-app-metrics-logs:
