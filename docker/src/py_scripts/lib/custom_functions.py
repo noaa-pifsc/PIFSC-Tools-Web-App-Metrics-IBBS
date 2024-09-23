@@ -2,10 +2,10 @@
 import time
 import json
 import pprint
+from datetime import datetime 
 import pytz
 
 # include selenium libraries
-from datetime import datetime 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC

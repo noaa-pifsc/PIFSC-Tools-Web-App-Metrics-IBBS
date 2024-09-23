@@ -48,7 +48,7 @@ else:
     fp = open("/app/data/"+app_config.csv_output_file, "x")
 
     # create the .csv header row
-    fp.write('"App Name","Metrics App Location","Web App Location","Date/Time (UTC)","Date/Time (HST)","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
+    fp.write('"App Name","Metrics App Location","W App Location","Date/Time (UTC)","Date/Time (HST)","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
 
 
 # set the selenium options:
