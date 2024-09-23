@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y wget && apt-get install -y zip \
 	&& apt-get install -y ./google-chrome-stable_current_amd64.deb \
 	&& apt-get clean
 
-RUN pip3 install selenium webdriver-manager
+RUN pip3 install selenium webdriver-manager && \
+pip3 install pytz
 
 # set the timezone of the linux container to UTC
 ENV TZ=UTC
