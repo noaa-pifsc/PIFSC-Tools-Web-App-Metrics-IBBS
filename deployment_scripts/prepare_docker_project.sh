@@ -4,8 +4,8 @@
 . ../docker/src/sh_scripts/config/project_deploy_config.sh
 
 
-# determine the scenario by using the values in the variables $database_location and $container_location
-if [[ "$database_location" == "local" ]] && [[ "$container_location" == "local" ]]; then
+# determine the scenario by using the values in the variables $application_location and $container_location
+if [[ "$application_location" == "local" ]] && [[ "$container_location" == "local" ]]; then
 	# this is a local database and container, this is a local scenario
 
 	# set the value of $testing_scenario to "local"
@@ -15,7 +15,7 @@ if [[ "$database_location" == "local" ]] && [[ "$container_location" == "local" 
 	inactive_scenarios=("hybrid" "remote")
 	
 
-elif [[ "$database_location" == "remote" ]] && [[ "$container_location" == "remote" ]]; then
+elif [[ "$application_location" == "remote" ]] && [[ "$container_location" == "remote" ]]; then
 	# this is a remote database and container, this is a remote scenario
 
 	# set the value of $testing_scenario to "remote"
