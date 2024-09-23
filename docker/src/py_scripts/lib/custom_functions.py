@@ -186,24 +186,16 @@ def wait_for_response (stale_element, by_method, clickable_element_id, start_tim
         # save the screenshot from the web request/page load
         driver.save_screenshot('/app/data/screenshots/'+screenshot_file)
 
-
-
         # define the UTC and HST timezones:
         utc_timezone = pytz.timezone("UTC")
         hst_timezone = pytz.timezone("Pacific/Honolulu")
 
-        # convert the start_timer to a datetime object so it can be used to calculate the HST date/time based on the UTC date/time
-        start_datetime_utc = utc_timezone.localize(start_timer /1000)
+        
+        # convert the start_timer to a datetime object using the current timezone (UTC)
+        start_datetime_utc = datetime.fromtimestamp(start_timer /1000)
 
-        log_value("start_datetime_utc is: "+str(start_datetime_utc), print_log_messages)
-
-        log_value("formatted start_datetime_utc is: "+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p'), print_log_messages)
-
-#         start_datetime_hst = start_datetime_utc.astimezone(hst_timezone)
-
-
-#        log_value("start_datetime_hst is: "+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p'), print_log_messages)
-
+        # Convert the UTC datetime object to the Pacific/Honolulu timezone so it can be logged separately
+        start_datetime_hst = start_datetime_utc.astimezone(hst_timezone)
 
         fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+driver.title+'","'+web_action+'","'+str(total_files)+'","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
 
