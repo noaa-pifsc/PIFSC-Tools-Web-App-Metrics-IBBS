@@ -9,6 +9,7 @@ import os
 import random
 import string
 from datetime import datetime, timedelta 
+import pytz
 
 # include selenium libraries
 from selenium import webdriver
@@ -48,7 +49,7 @@ else:
     fp = open("/app/data/"+app_config.csv_output_file, "x")
 
     # create the .csv header row
-    fp.write('"App Name","Metrics App Location","W App Location","Date/Time (UTC)","Date/Time (HST)","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
+    fp.write('"App Name","Metrics App Location","Web App Location","Date/Time (UTC)","Date/Time (HST)","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
 
 
 # set the selenium options:
@@ -576,6 +577,16 @@ else:
     os.remove(tomorrow_csv_file_path)
 
 
+# define the UTC and HST timezones:
+utc_timezone = pytz.timezone("UTC")
+hst_timezone = pytz.timezone("Pacific/Honolulu")
+
+
+# convert the start_timer to a datetime object using the current timezone (UTC)
+start_datetime_utc = datetime.fromtimestamp(start_timer /1000)
+
+# Convert the UTC datetime object to the Pacific/Honolulu timezone so it can be logged separately
+start_datetime_hst = start_datetime_utc.astimezone(hst_timezone)
 
 
 custom_functions.log_value("The downloaded file size is: "+str(total_file_size), print_log_messages)
@@ -586,7 +597,7 @@ screenshot_file = driver.title.replace("/", " ")+' specimen download complete.pn
 # save the screenshot from the web request/page load
 driver.save_screenshot('/app/data/screenshots/'+screenshot_file)
 
-fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.app_location+'","'+time.strftime('%m/%d/%Y %I:%M:%S %p', time.localtime(start_timer/1000))+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
+fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
 
 """
 END - 8.  Download the specimen .csv file
