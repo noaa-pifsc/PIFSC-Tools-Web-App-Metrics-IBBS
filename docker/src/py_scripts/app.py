@@ -87,7 +87,7 @@ start_timer=round(time.time()*1000)
 
 
 # check the value of the web_app_location
-if (project_scenario_config.web_app_location == "remote"):
+if (project_scenario_config.web_app_location == "Remote"):
     # this a remote application, use the remote_web_url
 
     custom_functions.log_value("This is a remote application: "+app_config.remote_web_url, print_log_messages)
