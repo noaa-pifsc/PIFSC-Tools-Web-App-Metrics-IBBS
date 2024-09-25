@@ -493,6 +493,15 @@ custom_functions.log_value("8.  Download the specimen .csv file", print_log_mess
 
 
 
+#check if the specimen csv file already exists (could be leftover from a previous script execution if it was interrupted)
+if custom_functions.specimen_csv_file_exists("/app/data", "IBBS_SPEC_DATA_"):
+    custom_functions.log_value ("the specimen csv file already exists, delete it from the file system before attempting to download it since it will appear that the csv download was already completed", print_log_messages)
+
+    # get the file size of the csv file and delete it from the file system
+    total_file_size = custom_functions.get_specimen_csv_file_info("/app/data", "IBBS_SPEC_DATA_")
+
+
+
 # click the Admin expand span element
 
 custom_functions.log_value("click the Admin expand span element", print_log_messages)
@@ -531,51 +540,23 @@ start_timer=round(time.time()*1000)
 # click the D/L Specimens link
 driver.find_element(By.XPATH, "//a[@class='a-TreeView-label'][text()='D/L Specimens']").click()
 
-# wait until the file download has completed:
-while not os.path.exists(today_csv_file_path) and not os.path.exists(tomorrow_csv_file_path):
-    custom_functions.log_value("Neither .csv file exists yet, sleep for 0.05 seconds and check the loop condition again", print_log_messages)
-    time.sleep(0.05)
 
+custom_functions.log_value("Wait until the file download has completed", print_log_messages)
+
+
+# wait until the file download has completed:
+while not custom_functions.specimen_csv_file_exists("/app/data", "IBBS_SPEC_DATA_"):
+    
+    custom_functions.log_value("The .csv file does not exist yet, sleep for 0.01 seconds and check the loop condition again", print_log_messages)
+    time.sleep(0.01)
+    
 
 # calculate the elapsed time based on the start/end timer variables
 total_time_ms=round(time.time()*1000)-start_timer
-custom_functions.log_value("The download has completed: "+str(total_time_ms)+" ms", print_log_messages)
+custom_functions.log_value("The csv file download has completed: "+str(total_time_ms)+" ms", print_log_messages)
 
-
-
-if os.path.exists(today_csv_file_path):
-    # the download file has today's date 
-    custom_functions.log_value ("the download file has today's date", print_log_messages)
-
-    current_csv_file_name = today_csv_file_name
-    
-    total_file_size = os.path.getsize(today_csv_file_path)
-    
-    # check the data folder
-#     tmp = os.popen("ls -l /app/data").read()
-
-#     custom_functions.log_value (tmp, print_log_messages)
-
-    # delete the .csv file
-    os.remove(today_csv_file_path)
-
-    
-else:
-    # the download file has tomorrow's date 
-    custom_functions.log_value ("the download file has tomorrow's date", print_log_messages)
-
-    current_csv_file_name = tomorrow_csv_file_name
-
-    total_file_size = os.path.getsize(tomorrow_csv_file_path)
-
-    # check the data folder
-#     tmp = os.popen("ls -l /app/data").read()
-
-#     custom_functions.log_value (tmp, print_log_messages)
-
-    # delete the .csv file
-    os.remove(tomorrow_csv_file_path)
-
+#retrieve the file size for the downloaded file and delete 
+total_file_size = custom_functions.get_specimen_csv_file_info("/app/data", "IBBS_SPEC_DATA_")
 
 # define the UTC and HST timezones:
 utc_timezone = pytz.timezone("UTC")
