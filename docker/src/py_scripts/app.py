@@ -9,6 +9,7 @@ import os
 import random
 import string
 from datetime import datetime, timedelta 
+import pytz
 
 # include selenium libraries
 from selenium import webdriver
@@ -48,7 +49,7 @@ else:
     fp = open("/app/data/"+app_config.csv_output_file, "x")
 
     # create the .csv header row
-    fp.write('"App Name","Metrics App Location","Test App Location","Date/Time","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
+    fp.write('"App Name","Metrics App Location","Web App Location","Date/Time (UTC)","Date/Time (HST)","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
 
 
 # set the selenium options:
@@ -85,8 +86,8 @@ custom_functions.log_value("1. Request the base_web_url defined in the applicati
 start_timer=round(time.time()*1000)
 
 
-# check the value of the app_location
-if (project_scenario_config.app_location == "remote"):
+# check the value of the web_app_location
+if (project_scenario_config.web_app_location == "Remote"):
     # this a remote application, use the remote_web_url
 
     custom_functions.log_value("This is a remote application: "+app_config.remote_web_url, print_log_messages)
@@ -492,6 +493,15 @@ custom_functions.log_value("8.  Download the specimen .csv file", print_log_mess
 
 
 
+#check if the specimen csv file already exists (could be leftover from a previous script execution if it was interrupted)
+if custom_functions.specimen_csv_file_exists("/app/data", "IBBS_SPEC_DATA_"):
+    custom_functions.log_value ("the specimen csv file already exists, delete it from the file system before attempting to download it since it will appear that the csv download was already completed", print_log_messages)
+
+    # get the file size of the csv file and delete it from the file system
+    total_file_size = custom_functions.get_specimen_csv_file_info("/app/data", "IBBS_SPEC_DATA_")
+
+
+
 # click the Admin expand span element
 
 custom_functions.log_value("click the Admin expand span element", print_log_messages)
@@ -530,52 +540,34 @@ start_timer=round(time.time()*1000)
 # click the D/L Specimens link
 driver.find_element(By.XPATH, "//a[@class='a-TreeView-label'][text()='D/L Specimens']").click()
 
-# wait until the file download has completed:
-while not os.path.exists(today_csv_file_path) and not os.path.exists(tomorrow_csv_file_path):
-    custom_functions.log_value("Neither .csv file exists yet, sleep for 0.05 seconds and check the loop condition again", print_log_messages)
-    time.sleep(0.05)
 
+custom_functions.log_value("Wait until the file download has completed", print_log_messages)
+
+
+# wait until the file download has completed:
+while not custom_functions.specimen_csv_file_exists("/app/data", "IBBS_SPEC_DATA_"):
+    
+    custom_functions.log_value("The .csv file does not exist yet, sleep for 0.01 seconds and check the loop condition again", print_log_messages)
+    time.sleep(0.01)
+    
 
 # calculate the elapsed time based on the start/end timer variables
 total_time_ms=round(time.time()*1000)-start_timer
-custom_functions.log_value("The download has completed: "+str(total_time_ms)+" ms", print_log_messages)
+custom_functions.log_value("The csv file download has completed: "+str(total_time_ms)+" ms", print_log_messages)
+
+#retrieve the file size for the downloaded file and delete 
+total_file_size = custom_functions.get_specimen_csv_file_info("/app/data", "IBBS_SPEC_DATA_")
+
+# define the UTC and HST timezones:
+utc_timezone = pytz.timezone("UTC")
+hst_timezone = pytz.timezone("Pacific/Honolulu")
 
 
+# convert the start_timer to a datetime object using the current timezone (UTC)
+start_datetime_utc = datetime.fromtimestamp(start_timer /1000)
 
-if os.path.exists(today_csv_file_path):
-    # the download file has today's date 
-    custom_functions.log_value ("the download file has today's date", print_log_messages)
-
-    current_csv_file_name = today_csv_file_name
-    
-    total_file_size = os.path.getsize(today_csv_file_path)
-    
-    # check the data folder
-#     tmp = os.popen("ls -l /app/data").read()
-
-#     custom_functions.log_value (tmp, print_log_messages)
-
-    # delete the .csv file
-    os.remove(today_csv_file_path)
-
-    
-else:
-    # the download file has tomorrow's date 
-    custom_functions.log_value ("the download file has tomorrow's date", print_log_messages)
-
-    current_csv_file_name = tomorrow_csv_file_name
-
-    total_file_size = os.path.getsize(tomorrow_csv_file_path)
-
-    # check the data folder
-#     tmp = os.popen("ls -l /app/data").read()
-
-#     custom_functions.log_value (tmp, print_log_messages)
-
-    # delete the .csv file
-    os.remove(tomorrow_csv_file_path)
-
-
+# Convert the UTC datetime object to the Pacific/Honolulu timezone so it can be logged separately
+start_datetime_hst = start_datetime_utc.astimezone(hst_timezone)
 
 
 custom_functions.log_value("The downloaded file size is: "+str(total_file_size), print_log_messages)
@@ -586,7 +578,7 @@ screenshot_file = driver.title.replace("/", " ")+' specimen download complete.pn
 # save the screenshot from the web request/page load
 driver.save_screenshot('/app/data/screenshots/'+screenshot_file)
 
-fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.app_location+'","'+time.strftime('%m/%d/%Y %I:%M:%S %p', time.localtime(start_timer/1000))+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
+fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.web_app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
 
 """
 END - 8.  Download the specimen .csv file

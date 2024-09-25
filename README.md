@@ -5,15 +5,15 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
 
 ## Resources
 -   IBBS WAM Version Control Information:
-    -   URL: git@github.com:noaa-pifsc/PIFSC-Tools-Web-App-Metrics-IBBS.git
-    -   Version: 1.3 (Git tag: ibbs_web_app_metrics_v1.3)
+    -   URL: https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics-IBBS.git
+    -   Version: 1.4 (Git tag: ibbs_web_app_metrics_v1.4)
     -   Forked repository (upstream)
         -   [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md)
         -   WAM Version Control Information:
             -   URL: git@github.com:noaa-pifsc/PIFSC-Tools-Web-App-Metrics.git
             -   Version: 1.4 (Git tag: web_app_metrics_v1.4)
 -   [Detailed/Summary performance metrics](https://docs.google.com/spreadsheets/d/1oDtnMyg9SosxHOoiq4af35_TU_-7dZyE/edit?usp=drive_link&ouid=107579489323446884981&rtpof=true&sd=true)
-    -   During the testing window the project was configured to run on an hourly basis each weekday for 12 hours (7 AM to 7 PM HST)
+    -   During the testing window the local/hybrid projects were configured to run on an hourly basis each weekday for 12 hours (7 AM to 7 PM HST)
     -   The [ibbs-web-app-metrics tab](https://docs.google.com/spreadsheets/d/1oDtnMyg9SosxHOoiq4af35_TU_-7dZyE/edit?gid=2021517478#gid=2021517478) contains the detailed information for each web action and the corresponding metrics that were captured
     -   The [Summary tab](https://docs.google.com/spreadsheets/d/1oDtnMyg9SosxHOoiq4af35_TU_-7dZyE/edit?gid=1590693321#gid=1590693321) contains the summarized information with comparisons between the different scenarios
 
@@ -24,13 +24,74 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
     -   Hybrid - this scenario deploys the docker container to a local docker host and connects to a remote Oracle database
 
 ## Setup Procedure
--   Execute the appropriate docker preparation script stored in the [deployment_scripts](./deployment_scripts) folder to prepare the docker container for deployment in a new working directory
-    -   For example use the [prepare_docker_project.local.sh](./deployment_scripts/prepare_docker_project.local.sh) bash script to prepare the Local docker container for deployment in the c:/docker/ibbs-web-app-metrics-local folder
--   Update the login_credentials.py file in the appropriate new working directory to specify the web login credentials for the (e.g. c:/docker/ibbs-web-app-metrics-local/docker/src/login_credentials.py) for the local scenario
+-   ### Web App Setup
+    -   Create a user account on the IBBS authentication system that will be used to execute the web actions
+        -   FishSTOC test IBBS web application
+            -   Login to the [test IBBS web application](https://test-apps-st.fisheries.noaa.gov/foss/f?p=ibbs) with an account that has been granted the IBBS_ADMIN role in the CAM system
+            -   Follow the [IBBS CAM Management Instructions](https://drive.google.com/file/d/1G-8IMLQPQMra2R8DBzgqSwWG6VW5NFA3/view?usp=drive_link) to create a user account with permissions to login to the test IBBS web application
+        -   PIFSC development IBBS web application
+            -   Create an APEX user account on the LHP_INTL_BIO_APP workspace on the PICMIDD server
+    -   Create a user account on the IBBS authorization system that will be used to execute the web actions
+        -   Login to the appropriate IBBS web application with an account that has been granted to DATA_ADMIN role
+        -   In the navigation menu click on Admin -> Authorization -> Auth Users
+        -   Create a User record with the with the same username as the user's authentication record
+            -   Add two groups for the new user: "DATA_WRITE" and "US"
+-   ### Linux
+    -   #### Clone the repository
+        ```
+        # clone the repository into a working directory that will be used to prepare the container for execution:
+        git clone https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics-IBBS.git
+        ```
+    -   #### Prepare the docker container
+        -   Set the \$base_docker_directory bash/environment variables to define the base directory location where the docker application will be built and executed
+            ```
+            # define the $base_docker_directory variable (e.g. /home/webd/docker) to make it easy to execute the preparation and deployment bash scripts:
+            base_docker_directory="[PATH TO PREPARATION FOLDER]"
+
+            # define the value of $base_docker_directory as an environment variable
+            export base_docker_directory
+            ```
+        -   Execute the preparation bash script:
+            ```
+            # execute the preparation script (in this example the remote scenario):
+            bash ./PIFSC-Tools-Web-App-Metrics-IBBS/deployment_scripts/prepare_docker_project.remote.sh
+            ```
+        -   press the "Enter" key to dismiss the bash script message
+    -   #### Specify the web app credentials
+        -   In the preparation folder update the login_credentials.py file (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote/docker/src/py_scripts/lib/login_credentials.py for the remote scenario)
+            -   Specify the web login credentials for the user created in the [Web App Setup](#web-app-setup) procedure
+        -   The code below is used for the remote scenario to edit the login_credentials.py configuration file:
+            ```
+            vim $base_docker_directory/ibbs-web-app-metrics-remote/docker/src/py_scripts/lib/login_credentials.py
+            ```
+-   ### Windows
+    -   #### Clone the repository
+        ```
+        # clone the repository into a working directory that will be used to prepare the container for execution:
+        git clone https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics-IBBS.git
+        ```
+        -   \*Note: The links in this documentation will work if you are viewing this README from the working directory
+    -   #### Prepare the docker container
+        -   Execute the appropriate docker preparation script stored in the [deployment_scripts](./deployment_scripts) folder to prepare the docker container for deployment in a new preparation folder
+            -   For example use the [prepare_docker_project.remote.sh](./deployment_scripts/prepare_docker_project.remote.sh) bash script to prepare the docker container for deployment in the remote scenario
+        -   When prompted specify the base directory where the project will be prepared (e.g. /c/docker for Windows), this will set the value of **$base_docker_directory** used within the preparation script
+        -   The preparation script will clone the project into a new preparation folder based on the value of **$base_docker_directory** (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote preparation folder for the remote scenario) and configure the docker project
+        -   This preparation folder will be used to build and execute the docker container
+    -   #### Specify the web app credentials
+        -   In the preparation folder update the login_credentials.py file (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote/docker/src/py_scripts/lib/login_credentials.py for the remote scenario)
+            -   Specify the web login credentials for the user created in the [Web App Setup](#web-app-setup) procedure
 -   \*Note: more information about the setup procedure for this forked project is available in the [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md#forked-repository-implementation)
 
 ## Building/Running Container
--   Execute the appropriate build and deploy script for the given scenario (e.g. [build_deploy_project.remote.sh](./deployment_scripts/build_deploy_project.remote.sh) for the remote scenario)
+-   In the preparation folder execute the appropriate build and deploy script for the given scenario
+    -   ### Linux
+        -   On Linux this bash script can be used to automate the execution of the docker container on a timer using cron
+            ```
+            # execute the build/deploy script (in this example the remote scenario)
+            bash $base_docker_directory/ibbs-web-app-metrics-remote/deployment_scripts/build_deploy_project.sh
+            ```
+    -   ### Windows
+        -   On Windows the batch script can be used to automate the execution of the docker container on a timer using Scheduled Tasks (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote/deployment_scripts/build_deploy_project.bat for the remote scenario)
 
 ## Docker Application Processing
 -   \*Note: more information about the docker application processing for this forked project is available in the [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md#docker-application-processing)
@@ -42,13 +103,17 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
 
 ## Standard Metrics/Information Logging
 -   The following metrics and information is captured for each web action in a .csv file:
-    -   Date/Time - The Date/Time the given web action was started in MM/DD/YYYY HH:MI:SS AM/PM format
+		-   App Name - The name of the application (IBBS APEX app)
+		-   Metrics App Location - is the location of the IBBS WAM docker container (local or remote)
+		-   Web App Location - is the location of the IBBS web application (local or remote)
+    -   Date/Time (UTC) - The Date/Time the given web action was started in the UTC time zone in MM/DD/YYYY HH:MI:SS AM/PM format
+    -   Date/Time (HST) - The Date/Time the given web action was started in the Hawaii Standard time zone in MM/DD/YYYY HH:MI:SS AM/PM format
     -   Page Name - The page the web action was executed on
     -   Action - The type of web action
     -   \# Files - The total number of web resource files (e.g. image, css, JavaScript file, etc.) downloaded for the given web action
     -   Total File Size (KB) - The total size in kilobytes of the web resource files downloaded for the given web action
     -   Total Response Time (s) - The total number of seconds for the web action to complete and the app is ready to accept user interactions
-    -   Screenshot file name - the name of the screenshot file saved in the data volume for the given web action
+    -   Screenshot File - the name of the screenshot file saved in the data volume for the given web action
 
 ## Implemented Web Actions
 1.  Load Login Page

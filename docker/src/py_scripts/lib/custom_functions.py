@@ -2,9 +2,12 @@
 import time
 import json
 import pprint
+from datetime import datetime 
+import pytz
+import glob
+import os
 
 # include selenium libraries
-from datetime import datetime 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -74,7 +77,7 @@ def process_browser_network_logs (logs, print_log_messages):
             # this is a network response received message
 
             # log the current log object in the designated log file, but not in the stdout (to reduce clutter)
-            log_object (log, False)
+#            log_object (log, False)
 
             # check if the current resource file is from the disk cache
             if (not log["params"]["response"]["fromDiskCache"]):
@@ -95,7 +98,7 @@ def process_browser_network_logs (logs, print_log_messages):
                         # the content-length element is lowercase
                     
                         # log the content length value for the current URL resource
-                        log_value ("content length: "+str(log["params"]["response"]["headers"]["content-length"])+" for url: "+log["params"]["response"]['url'], False)
+#                        log_value ("content length: "+str(log["params"]["response"]["headers"]["content-length"])+" for url: "+log["params"]["response"]['url'], False)
                         
                         # add the content length value for the current URL resource to the total_file_size variable:
                         total_file_size += int (log["params"]["response"]["headers"]["content-length"])
@@ -103,7 +106,7 @@ def process_browser_network_logs (logs, print_log_messages):
                         # the content-length element is uppercase
 
                         # log the content length value for the current URL resource
-                        log_value ("content length: "+str(log["params"]["response"]["headers"]["Content-Length"])+" for url: "+log["params"]["response"]['url'], False)
+#                        log_value ("content length: "+str(log["params"]["response"]["headers"]["Content-Length"])+" for url: "+log["params"]["response"]['url'], False)
                         
                         # add the content length value for the current URL resource to the total_file_size variable:
                         total_file_size += int (log["params"]["response"]["headers"]["Content-Length"])
@@ -113,7 +116,7 @@ def process_browser_network_logs (logs, print_log_messages):
 
 
                     # log the encoded data length value for the current URL resource
-                    log_value ("encodedDataLength: "+str(log["params"]["response"]["encodedDataLength"])+" for url: "+log["params"]["response"]['url'], False)
+#                    log_value ("encodedDataLength: "+str(log["params"]["response"]["encodedDataLength"])+" for url: "+log["params"]["response"]['url'], False)
                 
                 # increment the total number of resource files that were downloaded
                 total_files += 1
@@ -160,8 +163,6 @@ def wait_for_response (stale_element, by_method, clickable_element_id, start_tim
         EC.element_to_be_clickable((by_method, clickable_element_id)))      
     finally:
         
-
-        
         log_value ("The try section has finished executing, execute the finally section", print_log_messages)
         
         # stop the timer
@@ -187,7 +188,51 @@ def wait_for_response (stale_element, by_method, clickable_element_id, start_tim
         # save the screenshot from the web request/page load
         driver.save_screenshot('/app/data/screenshots/'+screenshot_file)
 
-        fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.app_location+'","'+time.strftime('%m/%d/%Y %I:%M:%S %p', time.localtime(start_timer/1000))+'","'+driver.title+'","'+web_action+'","'+str(total_files)+'","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
+        # define the UTC and HST timezones:
+        utc_timezone = pytz.timezone("UTC")
+        hst_timezone = pytz.timezone("Pacific/Honolulu")
+
+        
+        # convert the start_timer to a datetime object using the current timezone (UTC)
+        start_datetime_utc = datetime.fromtimestamp(start_timer /1000)
+
+        # Convert the UTC datetime object to the Pacific/Honolulu timezone so it can be logged separately
+        start_datetime_hst = start_datetime_utc.astimezone(hst_timezone)
+
+        fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.web_app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+driver.title+'","'+web_action+'","'+str(total_files)+'","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
 
         return True
+
+# function that determines if a csv file exists
+def specimen_csv_file_exists (file_path, file_prefix):
+
+#    log_value ("running specimen_csv_file_exists ("+file_path+", "+file_prefix+")", True)
+    
+    files = glob.glob(f"{file_path}/{file_prefix}*.csv")
+#    log_value ("The value of the files returned is: ", True)
+#    log_object (files, True)
+    
+    if not files:
+        return False
+    else:
+        return True
+
+# function that retrieves the temporary csv file size (in bytes) in the file_path with file_prefix
+# the function deletes the temporary csv file after getting the file size 
+def get_specimen_csv_file_info (file_path, file_prefix):
+    
+    files = glob.glob(f"{file_path}/{file_prefix}*.csv")
+
+    log_object(files[0], True)
+
+    # retrieve the file size of the csv file
+    total_file_size = os.path.getsize(files[0])
+
+    # delete the downloaded .csv file
+    os.remove(files[0])
+
+    # return the total file size (in bytes)
+    return total_file_size
+
+
 
