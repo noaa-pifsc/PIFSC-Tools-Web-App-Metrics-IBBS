@@ -7,4 +7,4 @@ web_app_location="Remote"
 container_location="Local"
 
 # network location
-newtork_location="West Coast VPN"
+network_location="West Coast VPN"

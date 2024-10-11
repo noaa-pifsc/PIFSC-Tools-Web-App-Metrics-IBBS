@@ -7,4 +7,4 @@ web_app_location="Local"
 container_location="Local"
 
 # network location
-newtork_location="PIFSC Ethernet"
+network_location="PIFSC Ethernet"

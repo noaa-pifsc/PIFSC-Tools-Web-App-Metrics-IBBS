@@ -7,4 +7,4 @@ web_app_location="Remote"
 container_location="Remote"
 
 # network location
-newtork_location="FishSTOC"
+network_location="FishSTOC"

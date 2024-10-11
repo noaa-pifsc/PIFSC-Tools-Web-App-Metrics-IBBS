@@ -7,4 +7,4 @@ web_app_location="Local"
 container_location="Local"
 
 # network location
-newtork_location="Pacific VPN"
+network_location="Pacific VPN"
