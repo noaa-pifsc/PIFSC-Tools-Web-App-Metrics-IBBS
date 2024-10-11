@@ -199,7 +199,7 @@ def wait_for_response (stale_element, by_method, clickable_element_id, start_tim
         # Convert the UTC datetime object to the Pacific/Honolulu timezone so it can be logged separately
         start_datetime_hst = start_datetime_utc.astimezone(hst_timezone)
 
-        fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.network_location+'","'+project_scenario_config.web_app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+driver.title+'","'+web_action+'","'+str(total_files)+'","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
+        fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.web_app_location+'","'+project_scenario_config.network_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+driver.title+'","'+web_action+'","'+str(total_files)+'","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
 
         return True
 
