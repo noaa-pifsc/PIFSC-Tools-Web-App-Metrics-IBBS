@@ -6,7 +6,7 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
 ## Resources
 -   IBBS WAM Version Control Information:
     -   URL: https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics-IBBS.git
-    -   Version: 1.4 (Git tag: ibbs_web_app_metrics_v1.4)
+    -   Version: 1.5 (Git tag: ibbs_web_app_metrics_v1.5)
     -   Forked repository (upstream)
         -   [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md)
         -   WAM Version Control Information:

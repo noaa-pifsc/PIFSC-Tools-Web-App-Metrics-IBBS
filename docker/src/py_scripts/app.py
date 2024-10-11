@@ -8,7 +8,7 @@ test_suite_start_timer = time.time()
 import os
 import random
 import string
-from datetime import datetime, timedelta 
+from datetime import datetime, timedelta
 import pytz
 
 # include selenium libraries
@@ -24,13 +24,13 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 # import custom .py include files:
-from lib import custom_functions     # defines custom functions used to 
+from lib import custom_functions     # defines custom functions used to
 from lib import app_config           # defines runtime application configuration values
 from lib import login_credentials    # defines web login credentials
 from lib import project_scenario_config
 
-    
-    
+
+
 # set the variable to also print all log messages or not:
 print_log_messages = True
 
@@ -49,7 +49,7 @@ else:
     fp = open("/app/data/"+app_config.csv_output_file, "x")
 
     # create the .csv header row
-    fp.write('"App Name","Metrics App Location","Web App Location","Date/Time (UTC)","Date/Time (HST)","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
+    fp.write('"App Name","Metrics App Location","Web App Location","Network","Date/Time (UTC)","Date/Time (HST)","Page Name","Action","# Files","Total File Size (KB)","Total Response Time (s)","Screenshot File"'+"\n")
 
 
 # set the selenium options:
@@ -91,17 +91,17 @@ if (project_scenario_config.web_app_location == "Remote"):
     # this a remote application, use the remote_web_url
 
     custom_functions.log_value("This is a remote application: "+app_config.remote_web_url, print_log_messages)
-    
+
     # load the URL in the web browser
-    driver.get(app_config.remote_web_url) 
+    driver.get(app_config.remote_web_url)
 else:
     # this a local application, use the local_web_url
 
     custom_functions.log_value("This is a local application: "+app_config.local_web_url, print_log_messages)
-    
+
     # load the URL in the web browser
-    driver.get(app_config.local_web_url) 
-    
+    driver.get(app_config.local_web_url)
+
 
 
 # wait for the response from the page load until the username field is clickable and log the standard metrics
@@ -118,7 +118,7 @@ START - 2. Login to the web app
 # Login to web application:
 custom_functions.log_value("2. login to the application", print_log_messages)
 
-    
+
 # find the username/password fields
 username_field = driver.find_element("id", "P101_USERNAME")
 password_field = driver.find_element("id", "P101_PASSWORD")
@@ -198,7 +198,7 @@ driver.execute_script("arguments[0].click()", specimen_link)
 
 # wait for the response from the page load until the region select element is clickable and log the standard metrics
 return_value = custom_functions.wait_for_response (None, By.ID, "P200_REGION_ID", start_timer, driver, print_log_messages, fp, None, "Page Load")
-            
+
 """
 END - 4. Open the View All Specimens Page
 """
@@ -220,7 +220,7 @@ start_timer=round(time.time()*1000)
 
 # click the create specimen button
 driver.find_element(By.XPATH, "//button[contains(@class, 't-Button')]/span[contains(., 'Create Specimen')]/..").click()
-                
+
 # wait for the response from the page load until the region select element is clickable and log the standard metrics
 return_value = custom_functions.wait_for_response (None, By.ID, "P210_START_CATCH_DATE", start_timer, driver, print_log_messages, fp, None, "Page Load")
 
@@ -233,7 +233,7 @@ END - 5. Open the View/Edit Specimen Page
 
 """
 START - 6. Submit the specimen form to create a new record
-""" 
+"""
 
 # Submit the specimen form and create a new record - Begin:
 
@@ -288,7 +288,7 @@ current_select_field.select_by_visible_text("Blue Marlin")
 current_field = driver.find_element("id", "P210_SEX_ID")
 current_select_field = Select(current_field)
 current_select_field.select_by_visible_text("Male")
-                    
+
 current_field = driver.find_element("id", "P210_LEN_TYPE_ID")
 current_select_field = Select(current_field)
 current_select_field.select_by_visible_text("eye to fork length")
@@ -349,13 +349,13 @@ return_value = custom_functions.wait_for_response (start_catch_date, By.ID, "P21
 
 """
 END - 6. Submit the specimen form to create a new record
-""" 
+"""
 
 
 
 """
 START - 7. Submit the specimen form to update an existing record
-""" 
+"""
 
 # Submit the specimen form and create a new record - Begin:
 
@@ -418,7 +418,7 @@ current_select_field.select_by_visible_text("Swordfish")
 current_field = driver.find_element("id", "P210_SEX_ID")
 current_select_field = Select(current_field)
 current_select_field.select_by_visible_text("Unknown")
-                    
+
 current_field = driver.find_element("id", "P210_LEN_TYPE_ID")
 current_select_field = Select(current_field)
 current_select_field.select_by_visible_text("eye to fork length")
@@ -482,11 +482,11 @@ return_value = custom_functions.wait_for_response (None, By.ID, "P200_REGION_ID"
 
 """
 END - 7. Submit the specimen form to update an existing record
-""" 
+"""
 
 """
 START - 8.  Download the specimen .csv file
-""" 
+"""
 
 # Download the specimen .csv file
 custom_functions.log_value("8.  Download the specimen .csv file", print_log_messages)
@@ -546,16 +546,16 @@ custom_functions.log_value("Wait until the file download has completed", print_l
 
 # wait until the file download has completed:
 while not custom_functions.specimen_csv_file_exists("/app/data", "IBBS_SPEC_DATA_"):
-    
+
     custom_functions.log_value("The .csv file does not exist yet, sleep for 0.01 seconds and check the loop condition again", print_log_messages)
     time.sleep(0.01)
-    
+
 
 # calculate the elapsed time based on the start/end timer variables
 total_time_ms=round(time.time()*1000)-start_timer
 custom_functions.log_value("The csv file download has completed: "+str(total_time_ms)+" ms", print_log_messages)
 
-#retrieve the file size for the downloaded file and delete 
+#retrieve the file size for the downloaded file and delete
 total_file_size = custom_functions.get_specimen_csv_file_info("/app/data", "IBBS_SPEC_DATA_")
 
 # define the UTC and HST timezones:
@@ -578,15 +578,15 @@ screenshot_file = driver.title.replace("/", " ")+' specimen download complete.pn
 # save the screenshot from the web request/page load
 driver.save_screenshot('/app/data/screenshots/'+screenshot_file)
 
-fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.web_app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
+fp.write('"'+app_config.app_name+'","'+project_scenario_config.container_location+'","'+project_scenario_config.network_location+'","'+project_scenario_config.web_app_location+'","'+start_datetime_utc.strftime('%m/%d/%Y %I:%M:%S %p')+'","'+start_datetime_hst.strftime('%m/%d/%Y %I:%M:%S %p')+'","IBBS_SPEC_DATA_YYYYMMDD.csv","Download Specimen Data","1","'+str(total_file_size)+'","'+str(round(total_time_ms / 1000, 3))+'","'+screenshot_file+'"'+"\n")
 
 """
 END - 8.  Download the specimen .csv file
-""" 
+"""
 
 """
 START - 9. Load Regional Sampling Charts
-""" 
+"""
 
 # Load Regional Sampling Charts
 custom_functions.log_value("9. Load Regional Sampling Charts", print_log_messages)
@@ -617,7 +617,7 @@ driver.find_element(By.XPATH, "//a[@class='a-TreeView-label'][text()='Region']")
 
 
 
-# wait for the response from the page load until the "Length Bins (cm)" label is visible in the swordfish chart region 
+# wait for the response from the page load until the "Length Bins (cm)" label is visible in the swordfish chart region
 return_value = custom_functions.wait_for_response (None, By.XPATH, "//h2[contains(@class, 't-Region-title')][text()='Swordfish']/../../..//*[name()='text'][text()='Length Bins (cm)']", start_timer, driver, print_log_messages, fp, None, "Page Load")
 
 
@@ -625,11 +625,11 @@ return_value = custom_functions.wait_for_response (None, By.XPATH, "//h2[contain
 
 """
 END - 9. Load Regional Sampling Charts
-""" 
+"""
 
 """
 START - 10. Filter/Reload Regional Sampling Charts
-""" 
+"""
 
 custom_functions.log_value("10. Filter/Reload Regional Sampling Charts", print_log_messages)
 
@@ -643,14 +643,14 @@ start_timer=round(time.time()*1000)
 # change the region select element value which will reload the page:
 region_select.select_by_visible_text("Eastern North Pacific")
 
-# wait for the response from the page load until the "Length Bins (cm)" label is visible in the swordfish chart region 
+# wait for the response from the page load until the "Length Bins (cm)" label is visible in the swordfish chart region
 return_value = custom_functions.wait_for_response (region_element, By.XPATH, "//h2[contains(@class, 't-Region-title')][text()='Swordfish']/../../..//*[name()='text'][text()='Length Bins (cm)']", start_timer, driver, print_log_messages, fp, 'filter', "Page Reload/Filter Report")
 
 
 
 """
 END - 10. Filter/Reload Regional Sampling Charts
-""" 
+"""
 
 
 
@@ -675,5 +675,3 @@ driver.close()
 
 # quit the selenium driver
 driver.quit()
-
-
