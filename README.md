@@ -18,10 +18,23 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
     -   The [Summary tab](https://docs.google.com/spreadsheets/d/1oDtnMyg9SosxHOoiq4af35_TU_-7dZyE/edit?gid=1590693321#gid=1590693321) contains the summarized information with comparisons between the different scenarios
 
 ## Scenarios
--   There are three different scenarios implemented by the docker project:
-    -   Local - this scenario deploys the docker container to a local docker host and connects to a local Oracle database
-    -   Remote - this scenario deploys the docker container to a remote docker host and connects to a remote Oracle database
-    -   Hybrid - this scenario deploys the docker container to a local docker host and connects to a remote Oracle database
+-   There are multiple scenarios implemented by the docker project:
+    -   Local - this scenario deploys the docker container to a local docker host and connects to a local web app in the following network configurations:
+        -   PIFSC Ethernet
+        -   Pacific VPN
+    -   Remote - this scenario deploys the docker container to a remote docker host and connects to a remote web app in the following network configurations:
+        -   FishSTOC network
+    -   Hybrid - this scenario deploys the docker container to a local docker host and connects to a remote web app in the following network configurations:
+        -   PIFSC Ethernet
+        -   Pacific VPN
+        -   East Coast VPN
+        -   West Coast VPN
+-   Each scenario has its own set of files used to specify the configuration during the [preparation process](#prepare-the-docker-container)
+    -   Configuration files:
+        -   Bash script configuration (e.g. [project_scenario_config.pifsc-ethernet.local.sh](./docker/src/sh_scripts/config/project_scenario_config.pifsc-ethernet.local.sh) for the PIFSC Ethernet network/local database scenario)
+        -   Python configuration (e.g. [project_scenario_config.pacific-vpn.hybrid.py](./docker/src/py_scripts/lib/project_scenario_config.pacific-vpn.hybrid.py) for the Pacific VPN network/hybrid scenario)
+    -   deployment script (e.g. [prepare_docker_project.fishstoc.remote.sh](./deployment_scripts/prepare_docker_project.fishstoc.remote.sh) for the FishSTOC network/remote web app scenario)
+        -   The deployment script prepares the working directory for the docker container and renames the corresponding configuration files to make them active
 
 ## Setup Procedure
 -   ### Web App Setup
@@ -53,16 +66,16 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
             ```
         -   Execute the preparation bash script:
             ```
-            # execute the preparation script (in this example the remote scenario):
-            bash ./PIFSC-Tools-Web-App-Metrics-IBBS/deployment_scripts/prepare_docker_project.remote.sh
+            # execute the preparation script (in this example the FishSTOC network/remote web app scenario):
+            bash ./PIFSC-Tools-Web-App-Metrics-IBBS/deployment_scripts/prepare_docker_project.fishstoc.remote.sh
             ```
         -   press the "Enter" key to dismiss the bash script message
     -   #### Specify the web app credentials
-        -   In the preparation folder update the login_credentials.py file (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote/docker/src/py_scripts/lib/login_credentials.py for the remote scenario)
+        -   In the preparation folder update the login_credentials.py file (e.g. **$base_docker_directory**/ibbs-web-app-metrics-fishstoc-remote/docker/src/py_scripts/lib/login_credentials.py for the FishSTOC network/remote web app scenario)
             -   Specify the web login credentials for the user created in the [Web App Setup](#web-app-setup) procedure
         -   The code below is used for the remote scenario to edit the login_credentials.py configuration file:
             ```
-            vim $base_docker_directory/ibbs-web-app-metrics-remote/docker/src/py_scripts/lib/login_credentials.py
+            vim $base_docker_directory/ibbs-web-app-metrics-fishstoc-remote/docker/src/py_scripts/lib/login_credentials.py
             ```
 -   ### Windows
     -   #### Clone the repository
@@ -73,12 +86,12 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
         -   \*Note: The links in this documentation will work if you are viewing this README from the working directory
     -   #### Prepare the docker container
         -   Execute the appropriate docker preparation script stored in the [deployment_scripts](./deployment_scripts) folder to prepare the docker container for deployment in a new preparation folder
-            -   For example use the [prepare_docker_project.remote.sh](./deployment_scripts/prepare_docker_project.remote.sh) bash script to prepare the docker container for deployment in the remote scenario
+            -   For example use the [prepare_docker_project.remote.sh](./deployment_scripts/prepare_docker_project.fishstoc.remote.sh) bash script to prepare the docker container for deployment in the FishSTOC network/remote web app scenario
         -   When prompted specify the base directory where the project will be prepared (e.g. /c/docker for Windows), this will set the value of **$base_docker_directory** used within the preparation script
-        -   The preparation script will clone the project into a new preparation folder based on the value of **$base_docker_directory** (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote preparation folder for the remote scenario) and configure the docker project
+        -   The preparation script will clone the project into a new preparation folder based on the value of **$base_docker_directory** (e.g. **$base_docker_directory**/ibbs-web-app-metrics-fishstoc-remote preparation folder for the FishSTOC network/remote web app scenario) and configure the docker project
         -   This preparation folder will be used to build and execute the docker container
     -   #### Specify the web app credentials
-        -   In the preparation folder update the login_credentials.py file (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote/docker/src/py_scripts/lib/login_credentials.py for the remote scenario)
+        -   In the preparation folder update the login_credentials.py file (e.g. **$base_docker_directory**/ibbs-web-app-metrics-fishstoc-remote/docker/src/py_scripts/lib/login_credentials.py for the FishSTOC network/remote web app scenario)
             -   Specify the web login credentials for the user created in the [Web App Setup](#web-app-setup) procedure
 -   \*Note: more information about the setup procedure for this forked project is available in the [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md#forked-repository-implementation)
 
@@ -87,25 +100,27 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
     -   ### Linux
         -   On Linux this bash script can be used to automate the execution of the docker container on a timer using cron
             ```
-            # execute the build/deploy script (in this example the remote scenario)
-            bash $base_docker_directory/ibbs-web-app-metrics-remote/deployment_scripts/build_deploy_project.sh
+            # execute the build/deploy script (in this example the FishSTOC network/remote web app scenario)
+            bash $base_docker_directory/ibbs-web-app-metrics-fishstoc-remote/deployment_scripts/build_deploy_project.sh
             ```
     -   ### Windows
-        -   On Windows the batch script can be used to automate the execution of the docker container on a timer using Scheduled Tasks (e.g. **$base_docker_directory**/ibbs-web-app-metrics-remote/deployment_scripts/build_deploy_project.bat for the remote scenario)
+        -   On Windows the batch script can be used to automate the execution of the docker container on a timer using Scheduled Tasks (e.g. **$base_docker_directory**/ibbs-web-app-metrics-fishstoc-remote/deployment_scripts/build_deploy_project.bat for the remote scenario)
 
 ## Docker Application Processing
 -   \*Note: more information about the docker application processing for this forked project is available in the [Web App Metrics README](https://github.com/noaa-pifsc/PIFSC-Tools-Web-App-Metrics/blob/main/README.md#docker-application-processing)
 
 ## Checking Results
 -   Open the docker volume ibbs-web-app-metrics-logs to view the log files for the different executions of the docker container
+    -   The log files will have the following names: query_metrics_log_YYYYMMDD.log with the date in the UTC timezone (e.g. query_metrics_log_20241007.log for a script that began running on 10/7/2024 in the UTC timezone)
 -   Open the docker volume ibbs-web-app-metrics-data to view the exported data files for the different queries
     -   Open the ibbs_web_performance_metrics.csv to view the metrics that were captured for each query execution
 
 ## Standard Metrics/Information Logging
 -   The following metrics and information is captured for each web action in a .csv file:
-		-   App Name - The name of the application (IBBS APEX app)
-		-   Metrics App Location - is the location of the IBBS WAM docker container (local or remote)
-		-   Web App Location - is the location of the IBBS web application (local or remote)
+    -   App Name - The name of the application (IBBS APEX app)
+    -   Metrics App Location - is the location of the IBBS WAM docker container (local or remote)
+    -   Web App Location - is the location of the IBBS web application (local or remote)
+    -   Network - is the network configuration for the docker container (e.g. PIFSC Ethernet, FishSTOC, Pacific VPN, etc.)
     -   Date/Time (UTC) - The Date/Time the given web action was started in the UTC time zone in MM/DD/YYYY HH:MI:SS AM/PM format
     -   Date/Time (HST) - The Date/Time the given web action was started in the Hawaii Standard time zone in MM/DD/YYYY HH:MI:SS AM/PM format
     -   Page Name - The page the web action was executed on
