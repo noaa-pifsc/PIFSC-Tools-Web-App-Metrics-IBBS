@@ -4,7 +4,7 @@
 cd "$(dirname "$0")"
 
 # load the FishSTOC remote scenario configuration script to set the runtime variable values
-. ../docker/src/scripts/sh_script_config/project_scenario_config.fishstoc.remote.sh
+. ../docker/src/sh_script_config/project_scenario_config.fishstoc.remote.sh
 
 # execute the preparation script
 . ./prepare_docker_project.sh
