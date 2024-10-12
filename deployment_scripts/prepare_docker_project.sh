@@ -34,10 +34,15 @@ else
 	inactive_scenarios=("local" "remote")
 fi
 
+# replace the network_connection string's spaces with dashes
+path_network_connection="${network_connection// /-}"
+
+# convert the string to lowercase
+path_network_connection="${path_network_connection,,}"
 
 
 #deployment script for $testing_scenario scenario
-echo "running $testing_scenario scenario deployment script"
+echo "running $network_connection $testing_scenario scenario deployment script"
 
 # check if the base_docker_directory environment variable has been defined
 if [[ -z "${base_docker_directory}" ]]; then
@@ -61,7 +66,7 @@ fi
 
 
 # construct the project folder name based on the configuration variables:
-project_folder_name=$project_path"-"$testing_scenario
+project_folder_name=$project_path"-"$path_network_connection"-"$testing_scenario
 
 # construct the full project path
 full_project_path=$base_docker_directory"/"$project_folder_name"/docker/src"
@@ -86,7 +91,7 @@ git clone  $git_url $base_docker_directory/$project_folder_name
 echo "rename configuration files to make them active"
 
 #rename the project_scenario_config.local.py to project_scenario_config.py so it can be used as the active configuration file
-mv $full_project_path/py_scripts/lib/project_scenario_config.$testing_scenario.py $full_project_path/py_scripts/lib/project_scenario_config.py
+mv $full_project_path/py_scripts/lib/project_scenario_config.$path_network_connection.$testing_scenario.py $full_project_path/py_scripts/lib/project_scenario_config.py
 
 
 
@@ -95,21 +100,13 @@ echo "remove unused bash scripts based on the current testing scenario to preven
 # remove the preparation bash scripts to prevent confusion
 rm $base_docker_directory"/"$project_folder_name"/deployment_scripts/prepare_docker_project"*
 
-# loop through the inactive scenarios and delete the corresponding configuration files and automated SQL scripts
-for current_inactive_scenario in ${inactive_scenarios[@]}
-do
-
-#	echo "the current inactive scenario is: $current_inactive_scenario"
-
-	# remove the current inactive scenario's python configuration script
-	rm $full_project_path"/py_scripts/lib/project_scenario_config."$current_inactive_scenario".py"
-
-done
+# remove the inactive scenarios' python configuration scripts
+rm $full_project_path"/py_scripts/lib/project_scenario_config."*.*.py
 
 
 # notify the user that the docker project has been prepared and is ready for configuration and building/deployment:
 echo ""
-echo "the $testing_scenario docker project files are now ready for configuration and image building/deployment"
+echo "the $network_connection $testing_scenario docker project files are now ready for configuration and image building/deployment"
 echo ""
 echo ""
 echo "press Enter key to continue"

@@ -5,3 +5,6 @@ web_app_location="Remote"
 
 # container location
 container_location="Local"
+
+# network location
+network_location="West Coast VPN"
