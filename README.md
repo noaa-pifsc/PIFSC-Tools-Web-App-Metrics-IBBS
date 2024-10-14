@@ -114,6 +114,8 @@ The International Billfish Biosampling System (IBBS) Web Application Metrics (WA
     -   The log files will have the following names: query_metrics_log_YYYYMMDD.log with the date in the UTC timezone (e.g. query_metrics_log_20241007.log for a script that began running on 10/7/2024 in the UTC timezone)
 -   Open the docker volume ibbs-web-app-metrics-data to view the exported data files for the different queries
     -   Open the ibbs_web_performance_metrics.csv to view the metrics that were captured for each query execution
+        -   Summarize the performance metrics:
+            -   Copy the data from ibbs_web_performance_metrics.csv into the [ibbs-web-app-metrics-combined.xlsx](./performance%20metrics/ibbs-web-app-metrics-combined.xlsx) excel file in the "ibbs-web-app-metrics" worksheet and view the summary information in the "Summary" worksheet.
 
 ## Standard Metrics/Information Logging
 -   The following metrics and information is captured for each web action in a .csv file:
